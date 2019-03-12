@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@ComponentScan("com.training.springcore.service.measure")
-@PropertySource("classpath:application.properties")
+@ComponentScan("com.training.spring.bigcorp.service.measure")
 public class MeasureServiceTestConfiguration {
 }

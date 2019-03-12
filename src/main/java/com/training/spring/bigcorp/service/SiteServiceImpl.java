@@ -11,16 +11,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-@Service
+@Service("siteService")
 public class SiteServiceImpl implements SiteService {
-    @Autowired
     private CaptorService captorService;
+    private ResourceLoader resourceLoader;
 
     public SiteServiceImpl() {
     }
-    public SiteServiceImpl(CaptorService captorService) {
+    @Autowired
+    public SiteServiceImpl(CaptorService captorService, ResourceLoader resourceLoader) {
         System.out.println("Init SiteServiceImpl :" + this);
         this.captorService = captorService;
+        this.resourceLoader = resourceLoader;
     }
     @Override
     @Monitored
@@ -34,8 +36,7 @@ public class SiteServiceImpl implements SiteService {
         site.setCaptors(captorService.findBySite(siteId));
         return site;
     }
-        @Autowired
-        private ResourceLoader resourceLoader;
+
 
     @Override
     public void readFile(String path) {

@@ -19,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ContextConfiguration(classes = {SiteServiceImplTest.SiteServiceTestConfiguration.class})
 public class SiteServiceImplTest {
     @Configuration
-    @ComponentScan("com.training.springcore.service")
+    @ComponentScan("com.training.spring.bigcorp.service")
     static class SiteServiceTestConfiguration{ }
     @Autowired
     private SiteService siteService;
