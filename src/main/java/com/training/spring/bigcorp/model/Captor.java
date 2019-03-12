@@ -1,5 +1,7 @@
 package com.training.spring.bigcorp.model;
 
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -16,6 +18,8 @@ public class Captor {
 
     private PowerSource powerSource;
 
+    private Site site;
+
     @Deprecated
     public Captor() {
         // Use for serializer or deserializer
@@ -25,8 +29,10 @@ public class Captor {
      * Constructor to use with required property
      * @param name
      */
-    public Captor(String name) {
+    public Captor(String name ,Site site) {
+
         this.name = name;
+        this.site = site;
     }
 
     public String getId() {

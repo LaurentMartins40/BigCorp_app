@@ -3,6 +3,7 @@ package com.training.spring.bigcorp.service.mesure;
 import com.training.spring.bigcorp.model.Captor;
 import com.training.spring.bigcorp.model.Measure;
 import com.training.spring.bigcorp.model.MeasureStep;
+import com.training.spring.bigcorp.model.Site;
 import com.training.spring.bigcorp.service.measure.RealMeasureService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,7 @@ public class RealMeasureServiceTest {
     /**
      * Captor used in tests
      */
-    private Captor captor = new Captor("test");
+    private Captor captor = new Captor("test", new Site("test"));
     /**
      * Start instant used in tests
      */
