@@ -20,6 +20,14 @@ public class Captor {
 
     private Site site;
 
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
+    public Site getSite() {
+        return site;
+    }
+
     @Deprecated
     public Captor() {
         // Use for serializer or deserializer
