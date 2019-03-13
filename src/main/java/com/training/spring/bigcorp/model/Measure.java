@@ -1,11 +1,19 @@
 package com.training.spring.bigcorp.model;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.Objects;
 
+@Entity
 public class Measure {
+    @Column(nullable = false)
     private Instant instant;
+    @ManyToOne(optional = false)
     private Captor captor;
+    @Column(nullable = false)
     private Integer valueInWatt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = true, nullable = false)
     private long id ;
 
     public long getId() {

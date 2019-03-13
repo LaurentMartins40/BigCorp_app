@@ -1,6 +1,7 @@
 package com.training.spring.bigcorp.repository;
 
 import com.training.spring.bigcorp.model.Captor;
+import com.training.spring.bigcorp.model.Measure;
 import com.training.spring.bigcorp.model.Site;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
@@ -9,72 +10,58 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Instant;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@JdbcTest
-@ContextConfiguration(classes = {DaoTestConfig.class})
+@DataJpaTest
+@ComponentScan
 public class CaptorDaoImplTest {
     @Autowired
     private CaptorDao captorDao;
-    private Site site;
-    @Before
-    public void init(){
-        site = new Site("name");
-        site.setId("site1");
-    }
     @Test
     public void findById() {
         Captor captor = captorDao.findById("c1");
+        Assertions.assertThat(captor.getId()).isEqualTo("c1");
         Assertions.assertThat(captor.getName()).isEqualTo("Eolienne");
+        Assertions.assertThat(captor.getSite().getName()).isEqualTo("Bigcorp Lyon");
     }
     @Test
     public void findByIdShouldReturnNullWhenIdUnknown() {
-        Captor captor = captorDao.findById("unknown");
+        Captor captor = captorDao.findById("francis");
         Assertions.assertThat(captor).isNull();
     }
     @Test
     public void findAll() {
         List<Captor> captors = captorDao.findAll();
-        Assertions.assertThat(captors)
-                .hasSize(2)
-                .extracting("id", "name")
-                .contains(Tuple.tuple("c1", "Eolienne"))
-                .contains(Tuple.tuple("c2", "Laminoire à chaud"));
+        Assertions.assertThat(captors).hasSize(2);
     }
     @Test
     public void create() {
+        Captor captor = new Captor("Eolienne", new Site("site"));
+        captor.setId("c3");
         Assertions.assertThat(captorDao.findAll()).hasSize(2);
-        captorDao.create(new Captor("New captor", site));
-        Assertions.assertThat(captorDao.findAll())
-                .hasSize(3)
-                .extracting(Captor::getName)
-                .contains("Eolienne", "Laminoire à chaud", "New captor");
+        captorDao.persist(captor);
+        Assertions.assertThat(captorDao.findAll()).hasSize(3);
     }
     @Test
     public void update() {
         Captor captor = captorDao.findById("c1");
         Assertions.assertThat(captor.getName()).isEqualTo("Eolienne");
-        captor.setName("Captor updated");
-        captorDao.update(captor);
+        captor.setName("new name");captorDao.persist(captor);
         captor = captorDao.findById("c1");
-        Assertions.assertThat(captor.getName()).isEqualTo("Captor updated");
+        Assertions.assertThat(captor.getName()).isEqualTo("new name");
     }
     @Test
     public void deleteById() {
-        Captor newcaptor = new Captor("New captor", site);
-        captorDao.create(newcaptor);
-        Assertions.assertThat(captorDao.findById(newcaptor.getId())).isNotNull();
-        captorDao.deleteById(newcaptor.getId());
-        Assertions.assertThat(captorDao.findById(newcaptor.getId())).isNull();
-    }
-    @Test
-    public void deleteByIdShouldThrowExceptionWhenIdIsUsedAsForeignKey() {
-        Assertions.assertThatThrownBy(() -> captorDao.deleteById("c1"))
-                .isExactlyInstanceOf(DataIntegrityViolationException.class);
+        Assertions.assertThat(captorDao.findAll()).hasSize(2);
+        captorDao.delete(captorDao.findById("c1"));
+        Assertions.assertThat(captorDao.findAll()).hasSize(1);
     }
 }
