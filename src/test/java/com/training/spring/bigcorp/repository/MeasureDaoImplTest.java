@@ -1,6 +1,7 @@
 package com.training.spring.bigcorp.repository;
 import com.training.spring.bigcorp.model.Captor;
 import com.training.spring.bigcorp.model.Measure;
+import com.training.spring.bigcorp.model.RealCaptor;
 import com.training.spring.bigcorp.model.Site;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -11,8 +12,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import javax.validation.ConstraintViolationException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +44,7 @@ public class MeasureDaoImplTest {
     }
     @Test
     public void create() {
-        Captor captor = new Captor("Eolienne", new Site("site"));
+        Captor captor = new RealCaptor("Eolienne", new Site("site"));
         captor.setId("c1");
         Assertions.assertThat(measureDao.findAll()).hasSize(10);
         measureDao.save(new Measure(Instant.now(), 2_333_666, captor));
@@ -65,7 +64,7 @@ public class MeasureDaoImplTest {
     }
     @Test
     public void deleteById() {
-        Captor captor = new Captor("Eolienne", new Site("site"));
+        Captor captor = new RealCaptor("Eolienne", new Site("site"));
         captor.setId("c1");
         Measure newmeasure = new Measure(Instant.now(), 2_333_666, captor);
         measureDao.save(newmeasure);

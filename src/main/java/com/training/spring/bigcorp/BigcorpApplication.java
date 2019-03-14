@@ -22,7 +22,6 @@ public class BigcorpApplication {
 		logger.info("plus d'informations sur " + bigCorpApplicationProperties.getWebSiteUrl());
 		logger.info("==========================================================");
 		SiteService site = context.getBean(SiteService.class);
-
 	}}
 
 

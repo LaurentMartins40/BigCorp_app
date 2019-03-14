@@ -2,8 +2,12 @@ package com.training.spring.bigcorp.model;
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
+
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
+
 @Entity
-public class Captor {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Captor {
     /**
      * Captor id
      */
@@ -14,31 +18,12 @@ public class Captor {
      */
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PowerSource powerSource;
     @ManyToOne(optional = false)
     private Site site;
-    @Column(nullable = true)
-    private Integer defaultPowerInWatt;
 
-    public Integer getDefaultPowerInWatt() {
-        return defaultPowerInWatt;
-    }
-
-    public void setDefaultPowerInWatt(Integer defaultPowerInWatt) {
-        this.defaultPowerInWatt = defaultPowerInWatt;
-    }
-
-    public PowerSource getPowerSource() {
-        return powerSource;
-    }
 
     public Site getSite() {
         return site;
-    }
-    public void setPowerSource(PowerSource powerSource) {
-        this.powerSource = powerSource;
     }
 
     public void setSite(Site site) {
@@ -54,12 +39,6 @@ public class Captor {
      * @param name
      */
     public Captor(String name ,Site site) {
-        this.powerSource = PowerSource.FIXED;
-        this.name = name;
-        this.site = site;
-    }
-    public Captor(String name ,Site site,String id) {
-        this.id = id;
         this.name = name;
         this.site = site;
     }

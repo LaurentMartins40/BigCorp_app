@@ -1,8 +1,6 @@
 package com.training.spring.bigcorp.repository;
 
-import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.PowerSource;
-import com.training.spring.bigcorp.model.Site;
+import com.training.spring.bigcorp.model.*;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.hibernate.exception.ConstraintViolationException;
@@ -58,7 +56,7 @@ public class CaptorDaoImplTest {
         site = new Site("site");
         entityManager.persist(site);
         Assertions.assertThat(captorDao.findAll()).hasSize(2);
-        Captor captor = new Captor("New Captor",site);
+        Captor captor = new RealCaptor("New Captor",site);
         captorDao.save(captor);
         Assertions.assertThat(captorDao.findAll())
                 .hasSize(3)
@@ -79,7 +77,7 @@ public class CaptorDaoImplTest {
     }
     @Test
     public void deleteById() {
-        Captor newcaptor = new Captor("New Captor",site);
+        Captor newcaptor = new RealCaptor("New Captor",site);
         captorDao.save(newcaptor);
         Assertions.assertThat(captorDao.findById(newcaptor.getId())).isNotEmpty();
         captorDao.delete(newcaptor);
@@ -100,12 +98,12 @@ public class CaptorDaoImplTest {
         ExampleMatcher matcher = ExampleMatcher.matching()
                 .withMatcher("name", match -> match.ignoreCase().contains())
                 .withIgnorePaths("id")
+                .withIgnorePaths("defaultPowerInWatt")
                 .withIgnorePaths("site")
-                .withIgnorePaths("powerSource")
                 .withIgnoreNullValues();
         site = new Site("Site2");
         entityManager.persist(site);
-        Captor captor = new Captor("lienn", site);
+        Captor captor = new FixedCaptor("lienn", site);
         List<Captor> captors = captorDao.findAll(Example.of(captor, matcher));
         Assertions.assertThat(captors)
                 .hasSize(1)
