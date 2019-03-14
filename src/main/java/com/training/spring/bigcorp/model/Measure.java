@@ -16,6 +16,17 @@ public class Measure {
     @Column(name = "id", updatable = true, nullable = false)
     private long id ;
 
+    @Version
+    private int version;
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     public long getId() {
         return id;
     }

@@ -20,7 +20,16 @@ public abstract class Captor {
     private String name;
     @ManyToOne(optional = false)
     private Site site;
+    @Version
+    private int version;
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     public Site getSite() {
         return site;

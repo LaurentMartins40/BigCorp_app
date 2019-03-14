@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
@@ -84,5 +85,18 @@ public class SiteDaoImplTest {
                     entityManager.flush();})
                 .isExactlyInstanceOf(PersistenceException.class)
                 .hasCauseExactlyInstanceOf(ConstraintViolationException.class);
+    }
+    @Test
+    public void preventConcurrentWrite() {
+        Site site = siteDao.getOne("site1");
+        Assertions.assertThat(site.getVersion()).isEqualTo(0);
+        entityManager.detach(site);
+        site.setName("Site updated");
+        Site attachedSite = siteDao.save(site);
+        entityManager.flush();
+        Assertions.assertThat(attachedSite.getName()).isEqualTo("Site updated");
+        Assertions.assertThat(attachedSite.getVersion()).isEqualTo(1);
+        Assertions.assertThatThrownBy(() -> siteDao.save(site))
+                .isExactlyInstanceOf(ObjectOptimisticLockingFailureException.class);
     }
 }

@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
@@ -71,5 +72,18 @@ public class MeasureDaoImplTest {
         Assertions.assertThat(measureDao.findById(newmeasure.getId())).isNotEmpty();
         measureDao.delete(newmeasure);
         Assertions.assertThat(measureDao.findById(newmeasure.getId())).isEmpty();
+    }
+    @Test
+    public void preventConcurrentWrite() {
+        Measure measure = measureDao.getOne(-1L);
+        Assertions.assertThat(measure.getVersion()).isEqualTo(0);
+        entityManager.detach(measure);
+        measure.setValueInWatt(2000000);
+        Measure attachedMeasure = measureDao.save(measure);
+        entityManager.flush();
+        Assertions.assertThat(attachedMeasure.getValueInWatt()).isEqualTo(2000000);
+        Assertions.assertThat(attachedMeasure.getVersion()).isEqualTo(1);
+        Assertions.assertThatThrownBy(() -> measureDao.save(measure))
+                .isExactlyInstanceOf(ObjectOptimisticLockingFailureException.class);
     }
 }

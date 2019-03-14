@@ -19,18 +19,13 @@ public class SimulatedCaptor extends Captor{
     public Integer getMinPowerinWatt() {
         return minPowerInWatt;
     }
-
     public void setMinPowerinWatt(Integer minPowerinWatt) {
         this.minPowerInWatt = minPowerinWatt;
     }
-
     public Integer getMaxPowerinWatt() {
         return maxPowerInWatt;
     }
-
     public void setMaxPowerinWatt(Integer maxPowerinWatt) {
         this.maxPowerInWatt = maxPowerinWatt;
     }
-
-
 }
