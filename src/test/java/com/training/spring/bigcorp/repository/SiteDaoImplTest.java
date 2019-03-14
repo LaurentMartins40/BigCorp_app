@@ -4,6 +4,8 @@ import com.training.spring.bigcorp.model.Captor;
 import com.training.spring.bigcorp.model.PowerSource;
 import com.training.spring.bigcorp.model.Site;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.groups.Tuple;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,57 +13,76 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @ComponentScan
 public class SiteDaoImplTest {
     @Autowired
-    private CaptorDao captorDao;
-    @Autowired
-    private MeasureDao measureDao;
-    @Autowired
     private SiteDao siteDao;
+    @Autowired
+    private EntityManager entityManager;
     @Test
     public void findById() {
-        Site site = siteDao.findById("site1");
-        Assertions.assertThat(site.getId()).isEqualTo("site1");
-        Assertions.assertThat(site.getName()).isEqualTo("Bigcorp Lyon");
+        Optional<Site> site = siteDao.findById("site1");
+        Assertions.assertThat(site)
+                .get()
+                .extracting("name")
+                .containsExactly("Bigcorp Lyon");
     }
     @Test
     public void findByIdShouldReturnNullWhenIdUnknown() {
-        Site site = siteDao.findById("francis");
-        Assertions.assertThat(site).isNull();
+        Optional<Site> site = siteDao.findById("unknown");
+        Assertions.assertThat(site).isEmpty();
     }
     @Test
     public void findAll() {
         List<Site> sites = siteDao.findAll();
-        Assertions.assertThat(sites).hasSize(1);
+        Assertions.assertThat(sites).hasSize(1)
+                .extracting("id", "name")
+                .contains(Tuple.tuple("site1", "Bigcorp Lyon"));
     }
     @Test
     public void create() {
-        Site site = new Site("dfghjk");
         Assertions.assertThat(siteDao.findAll()).hasSize(1);
-        siteDao.persist(site);
+        siteDao.save(new Site("New site"));
         Assertions.assertThat(siteDao.findAll())
                 .hasSize(2)
                 .extracting(Site::getName)
-                .contains("dfghjk", "Bigcorp Lyon");
+                .contains("Bigcorp Lyon", "New site");
     }
     @Test
     public void update() {
-        Site site = siteDao.findById("site1");
-        Assertions.assertThat(site.getName()).isEqualTo("Bigcorp Lyon");
-        site.setName("new name");
-        siteDao.persist(site);
+        Optional<Site> site = siteDao.findById("site1");
+        Assertions.assertThat(site).get().extracting("name").containsExactly("Bigcorp Lyon");
+                site.ifPresent(s -> {
+                    s.setName("Site updated");
+                    siteDao.save(s);
+                });
+
         site = siteDao.findById("site1");
-        Assertions.assertThat(site.getName()).isEqualTo("new name");
+        Assertions.assertThat(site).get().extracting("name").containsExactly("Site updated");
     }
     @Test
     public void deleteById() {
-        Assertions.assertThat(siteDao.findAll()).hasSize(1);
-        siteDao.delete(siteDao.findById("site1"));
-        Assertions.assertThat(siteDao.findAll()).hasSize(0);
+        Site newsite = new Site("New site");
+        siteDao.save(newsite);
+        Assertions.assertThat(siteDao.findById(newsite.getId())).isNotEmpty();
+        siteDao.delete(newsite);
+        Assertions.assertThat(siteDao.findById(newsite.getId())).isEmpty();
+    }
+    @Test
+    public void deleteByIdShouldThrowExceptionWhenIdIsUsedAsForeignKey() {
+        Site site = siteDao.getOne("site1");
+        Assertions
+                .assertThatThrownBy(() -> {
+                    siteDao.delete(site);
+                    entityManager.flush();})
+                .isExactlyInstanceOf(PersistenceException.class)
+                .hasCauseExactlyInstanceOf(ConstraintViolationException.class);
     }
 }

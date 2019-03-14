@@ -54,7 +54,7 @@ public class Captor {
      * @param name
      */
     public Captor(String name ,Site site) {
-
+        this.powerSource = PowerSource.FIXED;
         this.name = name;
         this.site = site;
     }
