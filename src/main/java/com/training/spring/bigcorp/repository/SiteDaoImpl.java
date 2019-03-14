@@ -1,6 +1,7 @@
 package com.training.spring.bigcorp.repository;
 
 import com.training.spring.bigcorp.model.Site;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,8 @@ import java.util.List;
 
 @Repository
 public class SiteDaoImpl implements SiteDao {
+    @Autowired
+    private CaptorDao captorDao;
     @PersistenceContext
     private EntityManager em;
     @Override
@@ -27,6 +30,10 @@ public class SiteDaoImpl implements SiteDao {
     }
     @Override
     public void delete(Site site) {
+        captorDao.findAll().forEach(c->{
+            if(site.equals(c.getSite()))
+            captorDao.delete(c);
+        });
         em.remove(site);
     }
 }

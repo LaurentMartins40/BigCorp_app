@@ -51,6 +51,9 @@ public class Measure {
         this.valueInWatt = valueInWatt ;
         this.instant = instant;
     }
+    public Captor setCaptor(){
+        return this.captor;
+    }
 
     @Override
     public boolean equals(Object o) {

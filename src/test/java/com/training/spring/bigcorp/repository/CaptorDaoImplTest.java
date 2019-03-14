@@ -1,22 +1,16 @@
 package com.training.spring.bigcorp.repository;
 
 import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.Measure;
+import com.training.spring.bigcorp.model.PowerSource;
 import com.training.spring.bigcorp.model.Site;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.groups.Tuple;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.Instant;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -25,6 +19,10 @@ import java.util.List;
 public class CaptorDaoImplTest {
     @Autowired
     private CaptorDao captorDao;
+    @Autowired
+    private MeasureDao measureDao;
+    @Autowired
+    private SiteDao siteDao;
     @Test
     public void findById() {
         Captor captor = captorDao.findById("c1");
@@ -44,11 +42,16 @@ public class CaptorDaoImplTest {
     }
     @Test
     public void create() {
-        Captor captor = new Captor("Eolienne", new Site("site"));
-        captor.setId("c3");
+        Site site = new Site("dfghjk");
+        siteDao.persist(site);
         Assertions.assertThat(captorDao.findAll()).hasSize(2);
+        Captor captor = new Captor("New captor", site);
+        captor.setPowerSource(PowerSource.SIMULATED);
         captorDao.persist(captor);
-        Assertions.assertThat(captorDao.findAll()).hasSize(3);
+        Assertions.assertThat(captorDao.findAll())
+                .hasSize(3)
+                .extracting(Captor::getName)
+                .contains("Eolienne", "Laminoire à chaud", "New captor");
     }
     @Test
     public void update() {

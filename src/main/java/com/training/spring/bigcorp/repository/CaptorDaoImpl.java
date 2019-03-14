@@ -1,6 +1,7 @@
 package com.training.spring.bigcorp.repository;
 
 import com.training.spring.bigcorp.model.Captor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,6 +11,8 @@ import java.util.List;
 
 @Repository
 public class CaptorDaoImpl implements CaptorDao {
+    @Autowired
+    private MeasureDao measureDao;
     @PersistenceContext
     private EntityManager em;
     @Override
@@ -34,6 +37,10 @@ public class CaptorDaoImpl implements CaptorDao {
     }
     @Override
     public void delete(Captor captor) {
+        measureDao.findAll().forEach(m->{
+            if(captor.equals(m.getCaptor()))
+                em.remove(m);
+        });
         em.remove(captor);
     }
 }

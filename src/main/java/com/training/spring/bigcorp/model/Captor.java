@@ -58,6 +58,11 @@ public class Captor {
         this.name = name;
         this.site = site;
     }
+    public Captor(String name ,Site site,String id) {
+        this.id = id;
+        this.name = name;
+        this.site = site;
+    }
 
     public String getId() {
         return id;
