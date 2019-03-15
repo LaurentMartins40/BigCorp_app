@@ -1,6 +1,8 @@
 package com.training.spring.bigcorp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -14,6 +16,8 @@ public class Site {
     /**
      * Site name
      */
+    @NotNull
+    @Size(min = 3,max = 100)
     @Column(nullable = false)
     private String name;
     /**

@@ -5,11 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("FIXED")
 public class FixedCaptor extends Captor {
-
+    @NotNull
     private Integer defaultPowerInWatt;
     @Deprecated
     public FixedCaptor(){

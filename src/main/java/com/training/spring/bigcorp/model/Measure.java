@@ -1,14 +1,19 @@
 package com.training.spring.bigcorp.model;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.time.Instant;
 import java.util.Objects;
 
 @Entity
 public class Measure {
+    @NotNull
+    @PastOrPresent
     @Column(nullable = false)
     private Instant instant;
     @ManyToOne(optional = false)
     private Captor captor;
+    @NotNull
     @Column(nullable = false)
     private Integer valueInWatt;
     @Id
