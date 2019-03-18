@@ -30,10 +30,9 @@
                     </td>
                     <td><a class="btn btn-primary" href="/sites/{{id}}" role="button">Editer</a>
                     <a class="btn btn-primary" href="/sites/{{id}}/measures" role="button">Mesures</a>
-                        <form action="/sites/{{id}}/delete" method="post">
-                            <button type="submit" class="btn btn-danger"  style="display:inline-block">Supprimer</button>
+                        <form action="/sites/{{id}}/delete" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-danger" >Supprimer</button>
                         </form>
-                              
                     </td>
                 </tr>
                 {{/sites}}
