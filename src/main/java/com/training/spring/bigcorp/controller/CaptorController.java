@@ -2,6 +2,7 @@ package com.training.spring.bigcorp.controller;
 
 import com.training.spring.bigcorp.model.Captor;
 import com.training.spring.bigcorp.model.FixedCaptor;
+import com.training.spring.bigcorp.model.SimulatedCaptor;
 import com.training.spring.bigcorp.model.Site;
 import com.training.spring.bigcorp.repository.CaptorDao;
 import com.training.spring.bigcorp.repository.MeasureDao;
@@ -32,7 +33,7 @@ public class FixedCaptorController {
     public ModelAndView handle(Model model,@PathVariable String siteId) {
         Site site = siteDao.findById(siteId).orElseThrow(IllegalArgumentException::new);
         ModelAndView mv = new ModelAndView("captor");
-        mv.addObject("fixed", new FixedCaptor("",site,null));
+        mv.addObject("captor", new FixedCaptor("",site,null)).addObject("fixed",true);
         return mv;
     }
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -51,6 +52,7 @@ public class FixedCaptorController {
         captorDao.save(captorToPersist);
         return new ModelAndView("sites").addObject("sites", siteDao.findAll());
     }
+
     @PostMapping("/{id}/delete")
     public ModelAndView delete(@PathVariable String id) {
         measureDao.deleteByCaptorId(id);
@@ -61,7 +63,7 @@ public class FixedCaptorController {
     public ModelAndView edit(Model model,@PathVariable String id ,@PathVariable String siteId) {
         return new ModelAndView("captor")
                 .addObject("siteId", siteId)
-                .addObject("fixed",
-                        captorDao.findById(id).get());
+                .addObject("captor",
+                        captorDao.findById(id).get()).addObject("fixed",true);
     }
 }
