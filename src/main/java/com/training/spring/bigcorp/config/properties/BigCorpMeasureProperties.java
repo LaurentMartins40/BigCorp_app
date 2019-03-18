@@ -2,8 +2,7 @@ package com.training.spring.bigcorp.config.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "bigcorp")
-@Component
+
 public class BigCorpMeasureProperties {
 
     private Integer defaultFixed;

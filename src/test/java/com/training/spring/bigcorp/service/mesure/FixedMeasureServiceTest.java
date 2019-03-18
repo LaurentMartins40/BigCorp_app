@@ -1,13 +1,11 @@
 package com.training.spring.bigcorp.service.mesure;
 
-import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.Measure;
-import com.training.spring.bigcorp.model.MeasureStep;
-import com.training.spring.bigcorp.model.Site;
+import com.training.spring.bigcorp.model.*;
 import com.training.spring.bigcorp.service.measure.FixedMeasureService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -17,15 +15,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-/*
-//@ContextConfiguration(classes = {MeasureServiceTestConfiguration.class})
+
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
+//@ContextConfiguration(classes = {MeasureServiceTestConfiguration.class})
 public class FixedMeasureServiceTest {
     @Autowired
     private FixedMeasureService service;
 
-    private Captor captor = new Captor("test", new Site("test"));
+    private FixedCaptor captor = new FixedCaptor("test", new Site("test"),100);
 
     Instant start = Instant.parse("2018-09-01T22:00:00Z");
 
@@ -92,4 +91,4 @@ public class FixedMeasureServiceTest {
                         "2018-09-02T20:00:00Z",
                         "2018-09-02T21:00:00Z");
     }
-}*/
+}

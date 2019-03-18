@@ -1,10 +1,7 @@
 package com.training.spring.bigcorp.service.mesure;
 
 
-import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.Measure;
-import com.training.spring.bigcorp.model.MeasureStep;
-import com.training.spring.bigcorp.model.Site;
+import com.training.spring.bigcorp.model.*;
 import com.training.spring.bigcorp.service.measure.SimulatedMeasureService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +15,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-/*
+
 //@ContextConfiguration(classes = {MeasureServiceTestConfiguration.class})
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SimulatedMeasureServiceTest {
     @Autowired
     private SimulatedMeasureService service;
-    private Captor captor = new Captor("test", new Site("test"));
+    private SimulatedCaptor captor = new SimulatedCaptor("test", new Site("test"),100,200);
 
     Instant start = Instant.parse("2018-09-01T22:00:00Z");
 
@@ -90,4 +87,4 @@ public class SimulatedMeasureServiceTest {
                         "2018-09-02T20:00:00Z",
                         "2018-09-02T21:00:00Z");
     }
-}*/
+}

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.transaction.Transactional;
+import java.util.stream.Collectors;
 
 @Controller
 @Transactional
@@ -59,5 +60,17 @@ public class SiteController {
         captorDao.deleteBySiteId(id);
         siteDao.deleteById(id);
         return new ModelAndView("sites").addObject("sites", siteDao.findAll());
+    }
+    @GetMapping("/{id}/measures")
+    public ModelAndView findMeasuresById(@PathVariable String id) {
+        Site site = siteDao.findById(id).orElseThrow(IllegalArgumentException::new);
+        String captors = site.getCaptors()
+                .stream()
+                .map(c -> "{ id: '" + c.getId() + "', name: '" + c.getName()
+                        + "'}")
+                .collect(Collectors.joining(","));
+        return new ModelAndView("site-measures")
+                .addObject("site", site)
+                .addObject("captors", captors);
     }
 }

@@ -21,16 +21,16 @@ public class SimulatedCaptor extends Captor{
         this.maxPowerInWatt = maxPowerInWatt;
         this.minPowerInWatt = minPowerInWatt;
     }
-    public Integer getMinPowerinWatt() {
+    public Integer getMinPowerInWatt() {
         return minPowerInWatt;
     }
-    public void setMinPowerinWatt(Integer minPowerinWatt) {
+    public void setMinPowerInWatt(Integer minPowerinWatt) {
         this.minPowerInWatt = minPowerinWatt;
     }
-    public Integer getMaxPowerinWatt() {
+    public Integer getMaxPowerInWatt() {
         return maxPowerInWatt;
     }
-    public void setMaxPowerinWatt(Integer maxPowerinWatt) {
+    public void setMaxPowerInWatt(Integer maxPowerinWatt) {
         this.maxPowerInWatt = maxPowerinWatt;
     }
     @AssertTrue(message = "minPowerInWatt should be less than maxPowerInWatt")
