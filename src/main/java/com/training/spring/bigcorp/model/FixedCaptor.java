@@ -16,8 +16,9 @@ public class FixedCaptor extends Captor {
     public FixedCaptor(){
         super();
     }
-    public FixedCaptor(String name, Site site) {
-        super(name, site);
+    public FixedCaptor(String name, Site site, Integer defaultPowerInWatt) {
+        super(name, site, PowerSource.FIXED);
+        this.defaultPowerInWatt = defaultPowerInWatt;
     }
 
     public Integer getDefaultPowerInWatt() {

@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CaptorDao extends JpaRepository<Captor, String> {
+    void deleteBySiteId(String siteId);
     List<Captor> findBySiteId(String siteId);
 }

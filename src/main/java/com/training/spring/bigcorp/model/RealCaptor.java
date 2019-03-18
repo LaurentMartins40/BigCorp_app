@@ -11,6 +11,6 @@ public class RealCaptor extends Captor {
         super();
     }
     public RealCaptor(String name, Site site) {
-        super(name, site);
+        super(name, site,PowerSource.REAL);
     }
 }

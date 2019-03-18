@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <title>Sites BigCorp</title>
+    {{> partial-import}}
+</head>
+
+<body>
+    {{> partial-header}}
+    <div class="container">
+        {{#fixed.id}}<input type="hidden" class="form-control" name="id" value="{{fixed.id}}">{{/fixed.id}}
+        <form action="/sites/{{siteId}}/captors" method="post">
+            <div class="form-group">
+                <label for="siteName">Site</label>
+                <input type="text" readonly class="form-control" id="siteName" value="{{fixed.site.name}}">
+            </div>
+            <div class="form-group">
+                    <label for="name">nom du capteur</label>
+                    <input type="text" class="form-control" id="name" name="name" required
+                        aria-describedby="nameHelp" placeholder="nom du capteur">
+                    <small id="nameHelp" class="form-text text-muted">le nom du capteur</small>
+                </div>
+                {{#fixed}}<div class="form-group">
+                <label for="defaultPowerInWatt">Puissance par défaut</label>
+                <input type="number" class="form-control" id="defaultPowerInWatt" name="defaultPowerInWatt" required
+                    value="{{#fixed.defaultPowerInWatt}}{{fixed.defaultPowerInWatt}}{{/fixed.defaultPowerInWatt}}"
+                    aria-describedby="nameHelp" placeholder="Puissance par défaut (en W)">
+                <small id="nameHelp" class="form-text text-muted">Le capteur renverra toujours la
+                    même puissance égale à cette valeur saisie</small>
+            </div>{{/fixed}}
+            {{#simulated}}
+            <label for="minPowerInWatt">Puissance min</label>
+                <input type="number" class="form-control" id="minPowerInWatt" name="minPowerInWatt" required
+                    value="{{#simulated.minPowerInWatt}}{{simulated.minPowerInWatt}}{{/simulated.minPowerInWatt}}"
+                    aria-describedby="nameHelp" placeholder="Puissance par défaut (en W)">
+                <small id="nameHelp" class="form-text text-muted">Le capteur renverra toujours la
+                    même puissance égale à cette valeur saisie</small>
+                    <label for="maxPowerInWatt">Puissance max</label>
+                <input type="number" class="form-control" id="maxPowerInWatt" name="maxPowerInWatt" required
+                    value="{{#simulated.maxPowerInWatt}}{{simulated.maxPowerInWatt}}{{/simulated.maxPowerInWatt}}"
+                    aria-describedby="nameHelp" placeholder="Puissance par défaut (en W)">
+                <small id="nameHelp" class="form-text text-muted">Le capteur renverra toujours la
+                    même puissance égale à cette valeur saisie</small>
+            {{/simulated}}
+            <a class="btn btn-secondary" href="/sites/{{siteId}}">Annuler</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
+    {{> partial-footer}}
+</body>
+
+</html>
